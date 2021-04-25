@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ZadanieRekrutacyjneModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Permissions">
+    <Key>
+      <PropertyRef Name="PermissionID" />
+    </Key>
+    <Property Name="PermissionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PermissionCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PermissionName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="UserPermission" Relationship="Self.FK_Permission_UserPermission" FromRole="Permissions" ToRole="UserPermission" />
+  </EntityType>
+  <EntityType Name="UserPermission">
+    <Key>
+      <PropertyRef Name="UserPermissionID" />
+    </Key>
+    <Property Name="UserPermissionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int32" />
+    <Property Name="PermissionID" Type="Int32" />
+    <NavigationProperty Name="Permissions" Relationship="Self.FK_Permission_UserPermission" FromRole="UserPermission" ToRole="Permissions" />
+    <NavigationProperty Name="Users" Relationship="Self.FK_User_UserPermission" FromRole="UserPermission" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="PESEL" Type="String" MaxLength="11" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DateOfBirth" Type="DateTime" Precision="0" />
+    <Property Name="PlaceOfBirth" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Position" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="UserPermission" Relationship="Self.FK_User_UserPermission" FromRole="Users" ToRole="UserPermission" />
+  </EntityType>
+  <Association Name="FK_Permission_UserPermission">
+    <End Role="Permissions" Type="Self.Permissions" Multiplicity="0..1" />
+    <End Role="UserPermission" Type="Self.UserPermission" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Permissions">
+        <PropertyRef Name="PermissionID" />
+      </Principal>
+      <Dependent Role="UserPermission">
+        <PropertyRef Name="PermissionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_UserPermission">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="UserPermission" Type="Self.UserPermission" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="UserPermission">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ZadanieRekrutacyjneEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Permissions" EntityType="Self.Permissions" />
+    <EntitySet Name="UserPermission" EntityType="Self.UserPermission" />
+    <EntitySet Name="Users" EntityType="Self.Users" />
+    <AssociationSet Name="FK_Permission_UserPermission" Association="Self.FK_Permission_UserPermission">
+      <End Role="Permissions" EntitySet="Permissions" />
+      <End Role="UserPermission" EntitySet="UserPermission" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_UserPermission" Association="Self.FK_User_UserPermission">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="UserPermission" EntitySet="UserPermission" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

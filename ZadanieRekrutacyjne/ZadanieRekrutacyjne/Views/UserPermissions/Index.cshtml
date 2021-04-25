@@ -1,0 +1,43 @@
+﻿@model IEnumerable<ZadanieRekrutacyjne.Models.UserPermission>
+
+@{
+    ViewBag.Title = "Uprawnienia";
+}
+
+
+<p>
+    @Html.ActionLink("Dodaj uprawnienia", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Permissions.PermissionCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Permissions.PermissionName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Users.Login)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Permissions.PermissionCode)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Permissions.PermissionName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Users.Login)
+    </td>
+    <td>
+        @Html.ActionLink("Edytuj", "Edit", new { id = item.UserPermissionID }) |
+        @Html.ActionLink("Usuń", "Delete", new { id = item.UserPermissionID })
+    </td>
+</tr>
+}
+
+</table>
